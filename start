@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ -n "$TZ" ] ; then
+    ln -sf /usr/share/zoneinfo/$TZ /etc/localtime
+fi
+
+perl -i -p \
+    -e 's/CLIENTHOSTNAME=.*/CLIENTHOSTNAME="$ENV{HOSTNAME}"/;' \
+    -e 's/XYMONSERVERS=.*/XYMONSERVERS="$ENV{XYMONSERVERS}"/;' \
+    /etc/default/xymon-client
+
+# TODO:  start this directly
+service xymon-client start
+
+while sleep 365d; do
+echo sleeping
+done
